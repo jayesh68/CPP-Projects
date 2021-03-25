@@ -4,13 +4,15 @@ using namespace std;
   
 struct queueEntry 
 { 
-    int v;   
-    int dist;  
+    int v;   	//position or vertex of the point
+    int dist;   //dice throw from starting point
 }; 
-  
+ 
+//BFS Function to calculate the minimum number of dice throws to reach the end point
 int getMinDiceThrows(int move[], int N) 
 {   
- 
+
+    // Setting all the vertices as not visited
     bool *visited = new bool[N]; 
     for (int i = 0; i < N; i++) 
         visited[i] = false; 
@@ -18,28 +20,32 @@ int getMinDiceThrows(int move[], int N)
     queue<queueEntry> q; 
   
     visited[0] = true; 
-    queueEntry s = {0, 0}; 
+    queueEntry s = {0, 0}; 	// distance of 0'th vertex is also 0
     q.push(s); 
 
     queueEntry qe; 
     while (!q.empty()) 
     { 
         qe = q.front(); 
-        int v = qe.v; 
+        int v = qe.v; 		// vertex no. of queue entry
+
+	//if verted already at goal
         if (v == N-1) 
             break; 
   
         q.pop(); 
+
+	//For a dice throw ranging from a 1 to 6
         for (int j=v+1; j<=(v+6) && j<N; ++j) 
         { 
             if (!visited[j]) 
             { 
                 queueEntry a; 
-                a.dist = (qe.dist + 1); 
-                visited[j] = true; 
+                a.dist = (qe.dist + 1); 	//Computing the dice throws from starting point to the current vertex 
+                visited[j] = true; 		//Setting visited to be true
 
-                if (move[j] != -1) 
-                    a.v = move[j]; 
+                if (move[j] != -1) 		//Checking for a snake or ladder
+                    a.v = move[j];   	
                 else
                     a.v = j; 
                 q.push(a); 
@@ -47,12 +53,14 @@ int getMinDiceThrows(int move[], int N)
         } 
     } 
 
-    return qe.dist; 
+    return qe.dist; 				//returning the number of dice throws to reach the goal
 } 
   
 int main() 
 { 
+    //100 points on the board
     int N = 100; 
+
     int moves[N]; 
     for (int i = 0; i<N; i++) 
         moves[i] = -1; 
