@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm> 
 
+//CLass which consists of vector variables to store the current node, parent and children info
 class Puzzle{
 public:
 	std::vector<int> node;
@@ -13,7 +14,6 @@ public:
 	
 public:
 	Puzzle() {};
-
 	Puzzle(std::vector<int> _node, Puzzle* _parent)
 		: node(_node), parent(_parent)
 	{}
@@ -29,6 +29,7 @@ public:
 
 };
 
+//Function to print the different nodes traversed after goal node is reached
 void Puzzle::printNode() {
 	int count = 0;
 	for (auto i : node) {
@@ -39,12 +40,14 @@ void Puzzle::printNode() {
 	}
 }
 
+//Checking for the blank tile before performing an action
 int Puzzle::blankTile() {
 	auto it = std::find(node.begin(), node.end(), 0);
 	auto z = std::distance(node.begin(), it);
 	return (int)z;
 }
 
+//Action to move up the puzzle
 void Puzzle::Up() {
 	int blank = blankTile();
 	std::vector<int> n = node;
@@ -54,6 +57,7 @@ void Puzzle::Up() {
 	children.push_back(child);
 }
 
+//Action to move down the puzzle
 void Puzzle::Down() {
 	int blank = blankTile();
 	std::vector<int> n = node;
@@ -63,6 +67,7 @@ void Puzzle::Down() {
 	children.push_back(child);
 }
 
+//Action to move right in the puzzle
 void Puzzle::Right() {
 	int blank = blankTile();
 	std::vector<int> n = node;
@@ -72,6 +77,7 @@ void Puzzle::Right() {
 	children.push_back(child);
 }
 
+//Action to move left in the puzzle
 void Puzzle::Left() {
 	int blank = blankTile();
 	std::vector<int> n = node;
@@ -81,23 +87,26 @@ void Puzzle::Left() {
 	children.push_back(child);
 }
 
+//Function to perform the BFS method to find the goal node
 void Puzzle::bfs(std::vector<int> const& start, std::vector<int> const& goal) {
 
 	bool goalReached = false;
-	std::queue<Puzzle*> openList;
-	std::queue<Puzzle*> visitedList;
-	std::vector<Puzzle*> path;
+	std::queue<Puzzle*> openList;		//Queue which contain the next node to be processes
+	std::queue<Puzzle*> visitedList;	//Queue to store the visited nodes traversed by the blank tile
+	std::vector<Puzzle*> path;		//array to store the parent info for the children which would be used for backtracking
 
-	Puzzle initnode = Puzzle(start, NULL);
-	openList.push(&initnode);
+	Puzzle initnode = Puzzle(start, NULL);	
+	openList.push(&initnode);		//Initializing the open list with the node entered by the user
 
 	while (!openList.empty() && !goalReached) 
 	{
-		Puzzle* action = openList.front();
-		visitedList.push(action);
+		Puzzle* action = openList.front();	//Getting the element in the queue
+		visitedList.push(action);		//Moving the node to the visited queue
 
-		openList.pop();
-		action->Up();
+		openList.pop();				//Popping the queue to store the info of the next node
+
+		//Perfroming to different actions to move th blank tile
+		action->Up();				
 		action->Down();
 		action->Right();
 		action->Left();
@@ -108,9 +117,9 @@ void Puzzle::bfs(std::vector<int> const& start, std::vector<int> const& goal) {
 			int a = 0;
 
 			if (c->node == goal) 
-			{
+			{	
 				std::cout << std::endl << "Goal Reached" << std::endl;
-
+				//If goal is reached performing backtracking to obtain the different nodes traversed
 				path.push_back(c);
 				while (c->parent != NULL) 
 				{
@@ -126,6 +135,7 @@ void Puzzle::bfs(std::vector<int> const& start, std::vector<int> const& goal) {
 				}
 			}
 
+			//If the child is not the goal and not visited, add it to the open list to perform action operations to get the children
 			if (!visitedCheck(visitedList, c))
 			{
 				openList.push(c);
@@ -134,6 +144,7 @@ void Puzzle::bfs(std::vector<int> const& start, std::vector<int> const& goal) {
 	}
 }
 
+//Boolean Function to check if a child node has been visited or not
 bool Puzzle::visitedCheck(std::queue<Puzzle*> q, Puzzle* p) {
 	bool exist = false;
 	while (!q.empty()) {
@@ -144,6 +155,7 @@ bool Puzzle::visitedCheck(std::queue<Puzzle*> q, Puzzle* p) {
 	return exist;
 }
 
+//Function to check if the start node can be solved by counting the number of inversions. If odd num of inversions the puzzle cannot be solved
 bool solvability(std::vector<int> const& puzzle) {
 	int inv = 0, x = 0, 
 	len = puzzle.size();
@@ -164,12 +176,13 @@ bool solvability(std::vector<int> const& puzzle) {
 
 int main()
 {
-	std::vector<int> s;
-	std::vector<int> g = { 1, 2, 3, 4, 5, 6, 7, 8, 0 };
+	std::vector<int> s;					//Start node to be entered by user
+	std::vector<int> g = { 1, 2, 3, 4, 5, 6, 7, 8, 0 };	//Goal node to be reached
 	
 	int element;
 	int choice;
 
+	//Getting user input
 	std::cout << "\n Enter the elements 0 - 8 without repeating" << std::endl;
 	for (int i = 0; i <= 8; i++) {
 		std::cout << "Element num - " << i << " : ";
@@ -177,11 +190,13 @@ int main()
 		s.push_back(element);
 	}
 
+	//Checking for inversions
 	if (solvability(s)) {
 		std::cout << "\nNode is valid :" << std::endl;
 		for (int i = 0, len = s.size(); i < len; i++)
 			std::cout << s.at(i) << ' ';
 		Puzzle p;
+		//Calling the main function to perform BFS to reach the goal node
 		p.bfs(s, g);
 	}
 	else {
