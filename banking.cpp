@@ -10,6 +10,7 @@ using std::ofstream;
 using std::ifstream;
 using std::ios;
 
+
 class account_query
 {
 private:
@@ -27,6 +28,7 @@ public:
     void delete_rec();
 };
 
+//Reads the user data present in the system
 void account_query::read_data()
 {
     cout<<"\nEnter Account Number: ";
@@ -39,6 +41,8 @@ void account_query::read_data()
     cin>>total_Balance;
     cout<<endl;
 }
+
+//Displays the user data to the bank represntative
 void account_query::show_data()
 {
     cout<<"Account Number: "<<account_number<<endl;
@@ -47,6 +51,8 @@ void account_query::show_data()
     cout<<"Current Balance: Rs.  "<<total_Balance<<endl;
     cout<<"-------------------------------"<<endl;
 }
+
+//Writes record to file/database
 void account_query::write_rec()
 {
     ofstream outfile;
@@ -55,6 +61,8 @@ void account_query::write_rec()
     outfile.write(reinterpret_cast<char *>(this), sizeof(*this));
     outfile.close();
 }
+
+//Reads records from the file/database
 void account_query::read_rec()
 {
     ifstream infile;
@@ -75,6 +83,8 @@ void account_query::read_rec()
     }
     infile.close();
 }
+
+//Searches for a particular user record using record number
 void account_query::search_rec()
 {
     int n;
@@ -88,12 +98,14 @@ void account_query::search_rec()
     infile.seekg(0,ios::end);
     int count = infile.tellg()/sizeof(*this);
     cout<<"\n There are "<<count<<" record in the file";
-    cout<<"\n Enter Record Number to Search: ";
+    cout<<"\n Enter record Number to search: ";
     cin>>n;
     infile.seekg((n-1)*sizeof(*this));
     infile.read(reinterpret_cast<char*>(this), sizeof(*this));
     show_data();
 }
+
+//Edits a particular record in the file
 void account_query::edit_rec()
 {
     int n;
@@ -120,6 +132,8 @@ void account_query::edit_rec()
     read_data();
     iofile.write(reinterpret_cast<char*>(this), sizeof(*this));
 }
+
+//Deletes a particular record from the file
 void account_query::delete_rec()
 {
     int n;
@@ -150,10 +164,13 @@ void account_query::delete_rec()
     remove("record.bank");
     rename("tmpfile.bank", "record.bank");
 }
+
 int main()
 {
     account_query A;
     int choice;
+    //System to allow bank reps to perform various operations
+
     cout<<"***Acount Information System***"<<endl;
     while(true)
     {
