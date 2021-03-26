@@ -4,30 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm> 
-
-//CLass which consists of vector variables to store the current node, parent and children info
-class Puzzle{
-public:
-	std::vector<int> node;
-	std::vector<Puzzle*> children;
-	Puzzle* parent;
-	
-public:
-	Puzzle() {};
-	Puzzle(std::vector<int> _node, Puzzle* _parent)
-		: node(_node), parent(_parent)
-	{}
-
-	void printNode(); 
-	int blankTile(); 
-	void Up();
-	void Down();
-	void Left();
-	void Right();
-	void bfs(std::vector<int> const&, std::vector<int> const&);
-	bool visitedCheck(std::queue<Puzzle*> q, Puzzle* n);
-
-};
+#include "Puzzle.h"
 
 //Function to print the different nodes traversed after goal node is reached
 void Puzzle::printNode() {
