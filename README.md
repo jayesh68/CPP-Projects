@@ -9,6 +9,5 @@ The repository contains 3 C++ programs representing different projects
 3. The snak_ladd.cpp is a project to predict the number of dice thows to reach the end point with different obstacles in the form of snakes and ladders to assist in reaching the end point. The game would consists of 100 points where the user can move forward with dice throws. When encountering a snake the user would get further away from the end point whereas using a ladder the user can advance closer to the end point. This program predicts the number of dice throws required to reach the final point using BFS with the presence of obstacles in the form of snakes and assitance in the form of ladders.
 
 
-Steps to run the projects
-
+**Steps to run the projects**
 Clone the repository and run the .exe files of the different projects in the executables folder to view the solutions of the projects
