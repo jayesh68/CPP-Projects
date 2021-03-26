@@ -10,4 +10,5 @@ The repository contains 3 C++ programs representing different projects
 
 
 **Steps to run the projects**
+
 Clone the repository and run the .exe files of the different projects in the executables folder to view the solutions of the projects
